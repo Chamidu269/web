@@ -22,7 +22,7 @@ export async function POST(request: Request) {
         {
           username: 'admin',
           password_hash: defaultHash,
-          email: 'admin@bustap.lk',
+          email: 'admin@paysmart.lk',
         }
       ]);
     }

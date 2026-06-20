@@ -74,7 +74,7 @@ export default function TrackPage() {
 
     // 3. Subscribe to Realtime coordinate updates on bus_locations table
     const channel = supabase
-      .channel('public-locations-feed')
+      .channel(`public-locations-feed-${Math.random().toString(36).substring(7)}`)
       .on(
         'postgres_changes',
         {

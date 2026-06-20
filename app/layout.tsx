@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { PHProvider } from './providers';
 
 export const metadata: Metadata = {
-  title: 'BusTap | Smart Bus Ticketing System',
+  title: 'PaySmart | Smart Bus Ticketing System',
   description: 'Sri Lanka contactless bus ticketing platform with tap-and-pay.',
 };
 
@@ -18,7 +18,7 @@ export default function RootLayout({
         <PHProvider>
           <header className="main-header">
             <div className="container">
-              <a href="/" className="logo">BusTap</a>
+              <a href="/" className="logo">Pay<span>Smart</span></a>
               <nav className="nav-links">
                 <a href="/register">Register</a>
                 <a href="/dashboard">Dashboard</a>

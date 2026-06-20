@@ -75,7 +75,7 @@ export default function TicketsPage() {
       if (!user) return;
 
       ticketsChannel = supabase
-        .channel(`passenger-tickets-${user.id}`)
+        .channel(`passenger-tickets-${user.id}-${Math.random().toString(36).substring(7)}`)
         .on(
           'postgres_changes',
           { 

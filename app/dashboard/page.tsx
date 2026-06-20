@@ -105,7 +105,7 @@ export default function DashboardPage() {
 
       // Listen to wallet account balance updates
       accountsChannel = supabase
-        .channel(`account-balance-${user.id}`)
+        .channel(`account-balance-${user.id}-${Math.random().toString(36).substring(7)}`)
         .on(
           'postgres_changes',
           { 
@@ -124,7 +124,7 @@ export default function DashboardPage() {
 
       // Listen to trips mutations (tap in/out)
       tripsChannel = supabase
-        .channel(`passenger-trips-${user.id}`)
+        .channel(`passenger-trips-${user.id}-${Math.random().toString(36).substring(7)}`)
         .on(
           'postgres_changes',
           { 

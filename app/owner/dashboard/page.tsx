@@ -105,7 +105,7 @@ export default async function OwnerDashboard() {
           <h1 style={{ fontSize: '1.75rem', marginBottom: '12px', color: '#f59e0b' }}>Account Suspended</h1>
           <p style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', lineHeight: '1.6', marginBottom: '30px' }}>
             Your operator portal privileges have been temporarily suspended by system administrators. 
-            Please contact support at <strong>ops@bustap.lk</strong> for dispute resolution.
+            Please contact support at <strong>ops@paysmart.lk</strong> for dispute resolution.
           </p>
           <div style={{ borderTop: '1px solid var(--glass-border)', paddingTop: '24px' }}>
             <a href="/login" style={{ textDecoration: 'none' }}>

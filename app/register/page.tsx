@@ -170,8 +170,8 @@ export default function RegisterPage() {
   return (
     <div style={{ maxWidth: '600px', margin: '40px auto', padding: '0 15px' }}>
       <div className="glass-panel" style={{ padding: '40px 30px' }}>
-        <h1 style={{ textAlign: 'center', background: 'linear-gradient(90deg, var(--primary-color), var(--accent-color))', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: '8px' }}>
-          Join BusTap
+        <h1 style={{ textAlign: 'center', marginBottom: '8px', fontWeight: 300 }}>
+          Join Pay<span style={{ fontWeight: 600, color: 'var(--primary-color)' }}>Smart</span>
         </h1>
         <p style={{ textAlign: 'center', color: 'var(--text-secondary)', marginBottom: '32px' }}>
           Sri Lanka's Contactless Transit System

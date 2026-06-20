@@ -46,7 +46,7 @@ export default async function AdminDashboard() {
           <h1 style={{ margin: 0, fontSize: '2.25rem', display: 'flex', alignItems: 'center', gap: '10px' }}>
             <Shield color="var(--danger)" size={32} /> System Admin Dashboard
           </h1>
-          <p style={{ margin: '4px 0 0 0', color: 'var(--text-secondary)' }}>Welcome to the BusTap operations control terminal.</p>
+          <p style={{ margin: '4px 0 0 0', color: 'var(--text-secondary)' }}>Welcome to the PaySmart operations control terminal.</p>
         </div>
 
         <div>

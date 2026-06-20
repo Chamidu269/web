@@ -53,7 +53,7 @@ export default function OwnerDashboardClient({ buses, initialLocations, metrics 
   useEffect(() => {
     // Subscribe to REALTIME updates on the bus_locations table
     const channel = supabase
-      .channel('schema-db-changes')
+      .channel(`schema-db-changes-${Math.random().toString(36).substring(7)}`)
       .on(
         'postgres_changes',
         {

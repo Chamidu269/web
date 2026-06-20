@@ -34,7 +34,7 @@ export async function POST(request: Request) {
           price_data: {
             currency: 'lkr',
             product_data: {
-              name: 'BusTap Wallet Recharge',
+              name: 'PaySmart Wallet Recharge',
               description: 'Instant transit credit top-up',
             },
             unit_amount: Math.round(topUpAmount * 100), // Stripe expects cents/cents value
