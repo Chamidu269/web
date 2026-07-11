@@ -59,13 +59,99 @@ export default function RegisterPage() {
     }
 
     try {
-      // 1. Sign Up the User using Supabase Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          emailRedirectTo: `${window.location.origin}/login`,
+          data: {
+            role,
+          },
+        },
       });
 
       if (authError) {
+        const message = authError.message?.toLowerCase() || '';
+
+        if (message.includes('already registered') || message.includes('already exists')) {
+          const { data: signInData, error: signInError } = await supabase.auth.signInWithPassword({
+            email,
+            password,
+          });
+
+          if (signInError || !signInData.user) {
+            setError('An account with this email already exists. Please sign in instead.');
+            setLoading(false);
+            return;
+          }
+
+          const userId = signInData.user.id;
+
+          if (role === 'passenger') {
+            const { error: profileError } = await supabase.from('profiles').upsert(
+              {
+                id: userId,
+                role: 'passenger',
+                status: 'active',
+              },
+              { onConflict: 'id' }
+            );
+
+            if (profileError) throw profileError;
+
+            const { error: passengerError } = await supabase.from('passengers').upsert(
+              {
+                id: userId,
+                full_name: fullName,
+                nic: nic,
+                phone: phone,
+                gender: gender,
+                address: address,
+                rfid_uid: rfid || null,
+              },
+              { onConflict: 'id' }
+            );
+
+            if (passengerError) throw passengerError;
+
+            const { error: accountError } = await supabase.from('accounts').upsert(
+              {
+                passenger_id: userId,
+                balance: 0.0,
+                status: 'active',
+              },
+              { onConflict: 'passenger_id' }
+            );
+
+            if (accountError) throw accountError;
+
+            posthog.capture('passenger_registered', {
+              id: userId,
+              nic: nic,
+            });
+          } else if (role === 'bus_owner') {
+            const { error: profileError } = await supabase.from('profiles').upsert(
+              {
+                id: userId,
+                role: 'bus_owner',
+                status: 'pending',
+              },
+              { onConflict: 'id' }
+            );
+
+            if (profileError) throw profileError;
+
+            posthog.capture('owner_registered', {
+              id: userId,
+            });
+          }
+
+          alert('This account already exists. Please sign in with your email and password.');
+          router.push('/login');
+          setLoading(false);
+          return;
+        }
+
         setError(authError.message);
         setLoading(false);
         return;
@@ -75,19 +161,18 @@ export default function RegisterPage() {
         const userId = authData.user.id;
 
         if (role === 'passenger') {
-          // 2. Insert profile role
-          const { error: profileError } = await supabase.from('profiles').insert([
+          const { error: profileError } = await supabase.from('profiles').upsert(
             {
               id: userId,
               role: 'passenger',
               status: 'active',
-            }
-          ]);
+            },
+            { onConflict: 'id' }
+          );
 
           if (profileError) throw profileError;
 
-          // 3. Insert passenger details
-          const { error: passengerError } = await supabase.from('passengers').insert([
+          const { error: passengerError } = await supabase.from('passengers').upsert(
             {
               id: userId,
               full_name: fullName,
@@ -96,23 +181,23 @@ export default function RegisterPage() {
               gender: gender,
               address: address,
               rfid_uid: rfid || null,
-            }
-          ]);
+            },
+            { onConflict: 'id' }
+          );
 
           if (passengerError) throw passengerError;
 
-          // 4. Insert initial wallet account
-          const { error: accountError } = await supabase.from('accounts').insert([
+          const { error: accountError } = await supabase.from('accounts').upsert(
             {
               passenger_id: userId,
-              balance: 0.00,
+              balance: 0.0,
               status: 'active',
-            }
-          ]);
+            },
+            { onConflict: 'passenger_id' }
+          );
 
           if (accountError) throw accountError;
 
-          // Track passenger registration in PostHog
           posthog.capture('passenger_registered', {
             id: userId,
             nic: nic,
@@ -121,23 +206,21 @@ export default function RegisterPage() {
           alert('Registration successful! You can now sign in.');
           router.push('/login');
         } else if (role === 'bus_owner') {
-          // 2. Insert profile role for bus owner (pending status)
-          const { error: profileError } = await supabase.from('profiles').insert([
+          const { error: profileError } = await supabase.from('profiles').upsert(
             {
               id: userId,
               role: 'bus_owner',
               status: 'pending',
-            }
-          ]);
+            },
+            { onConflict: 'id' }
+          );
 
           if (profileError) throw profileError;
 
-          // Track owner registration in PostHog
           posthog.capture('owner_registered', {
             id: userId,
           });
 
-          // Redirect to profile completion page
           router.push('/owner/complete-profile');
         }
       }

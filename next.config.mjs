@@ -2,7 +2,10 @@ import { withSentryConfig } from "@sentry/nextjs";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: true,
+  output: 'export', // Tells Next.js to generate static HTML/CSS/JS files
+  images: {
+    unoptimized: true, // Required because GitHub Pages cannot dynamically resize images
+  },
 };
 
 export default withSentryConfig(
@@ -17,7 +20,7 @@ export default withSentryConfig(
   {
     widenClientBounds: true,
     transpileClientSDK: true,
-    tunnelRoute: "/monitoring",
+    //tunnelRoute: "/monitoring",
     hideSourceMaps: true,
     disableLogger: true,
     automaticVercelMonitors: true,
